@@ -18,20 +18,18 @@ sub style {
 
     my ($h, $k) = _from_css($css);
 
-    # print $css;
-    # print dumper $k;
-
-    if (scalar @_ == 1 && ! ref $_[0]) {
+    if (scalar @_ == 1 && ! ref $_[0] && defined $_[0]) {
 	return $h->{shift()}
     }
-
-
-    if ((scalar @_ % 2) == 0 && (scalar @_)) {
+    elsif (scalar @_ == 1 && ! defined $_[0]) {
+	delete $self->attr->{'style'};
+    }
+    elsif ((scalar @_ % 2) == 0 && (scalar @_)) {
 	my $m = { @_ };
 	$css = _to_css($m, []);
 	$self->attr('style', $css);
-    } elsif (ref $_[0] eq 'HASH') {
-	# merge
+    }
+    elsif (ref $_[0] eq 'HASH') {
 	for (keys %{$_[0]}) { $h->{$_} = $_[0]->{$_} }
 	$css = _to_css($h, $k);
 	$self->attr('style', $css);
