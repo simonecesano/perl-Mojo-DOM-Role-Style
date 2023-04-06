@@ -1,4 +1,4 @@
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use Mojo::DOM;
 
@@ -6,19 +6,16 @@ my $dom = Mojo::DOM->new('<div style="color:red;background-color:grey;font-size:
 
 $\ = "\n";
 
+ok($dom->at('div')->style({ 'color' => 'blue'})->style->{color} eq 'blue', 'merge 1');
 
-# print $dom->at('div')->style;
-
-ok($dom->at('div')->style({ 'color' => 'blue'}) eq 'color:blue;background-color:grey;font-size:12pt', 'string round trip');
+ok($dom->at('div')->style eq "color:blue;background-color:grey;font-size:12pt", 'merge 2');
 
 ok($dom->at('div')->style({ 'font-size' => '16pt' })->style->{'font-size'} eq "16pt");
-# print $dom->at('div')->style;
 
+ok($dom->at('div')->style('color', 'purple')->style eq "color:purple", 'replace 2');
 
+ok($dom->at('div')->style(undef)->style eq "", 'undefine');
 
-ok($dom->at('div')->style('color', 'blue')->style('color') eq "blue", 'replace #1');
-ok($dom->at('div')->style eq "color:blue", 'replace #2');
+print $dom;
 
-
-# ok($dom->at('div')->style->all_text eq 'some string');
 
